@@ -1,9 +1,20 @@
 morse_beep
-=====
+==========
 
-An OTP library
+An OTP library and cli
+
+Required commands
+-----------------
+
+* rebar3
+* beep
 
 Build
 -----
 
-    $ rebar3 compile
+    $ rebar3 escriptize
+
+Show help
+---------
+
+    $ _build/default/bin/morse_beep --help
