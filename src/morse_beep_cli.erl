@@ -33,7 +33,7 @@ help(_) ->
         --char-delay: (integer)
         --word-delay: (integer)
         --sentence-delay: (integer)
-        --atempo: (float)
+        --time-scale: (float)
     ").
 
 parse_args([], Ack) ->
@@ -55,7 +55,7 @@ opts_from_param(Param) ->
         char_delay => maybe_to_integer(klsn_map:lookup([<<"char-delay">>], Param)),
         word_delay => maybe_to_integer(klsn_map:lookup([<<"word-delay">>], Param)),
         sentence_delay => maybe_to_integer(klsn_map:lookup([<<"sentence-delay">>], Param)),
-        atempo => maybe_to_float(klsn_map:lookup([<<"atempo">>], Param))
+        time_scale => maybe_to_float(klsn_map:lookup([<<"time-scale">>], Param))
     }).
 
 maybe_to_integer(none) ->

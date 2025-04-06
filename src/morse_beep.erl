@@ -22,7 +22,7 @@
         char_delay => pos_integer(),
         word_delay => pos_integer(),
         sentence_delay => pos_integer(),
-        atempo => float()
+        time_scale => float()
     }.
 
 main(Args) ->
@@ -70,7 +70,7 @@ beep_args(f, Type, Opts) ->
     F = klsn_map:get([Type, frequency], Opts, 2000),
     integer_to_binary(round(F));
 beep_args(Mode, Key, Opts) ->
-    Float = beep_args_(Mode, Key, Opts) * maps:get(atempo, Opts, 1),
+    Float = beep_args_(Mode, Key, Opts) * maps:get(time_scale, Opts, 1),
     integer_to_binary(round(Float)).
 
 beep_args_(l, short, Opts) ->
