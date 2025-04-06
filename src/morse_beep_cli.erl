@@ -54,8 +54,7 @@ help(_) ->
     --char-delay: (integer)
     --word-delay: (integer)
     --sentence-delay: (integer)
-    --time-scale: (float)
-    ").
+    --time-scale: (float)~n").
 
 parse_args([], Ack) ->
     Ack;
