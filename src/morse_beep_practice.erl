@@ -276,5 +276,16 @@ question(sentence) ->
         <<"innovative thinking enhances overall system performance\n">>,
         <<"every challenge is an opportunity to learn and grow\n">>,
         <<"mastery of coding leads to seamless and efficient communication\n">>,
-        <<"the future belongs to those who dare to innovate boldly\n">>
+        <<"the future belongs to those who dare to innovate boldly\n">>,
+        % Additional sentence questions with numbers:
+        <<"There are 10 digits in a phone number\n">>,
+        <<"The error code 404 indicates a missing resource\n">>,
+        <<"Operation 007 was successfully executed\n">>,
+        <<"This session contains 5 tasks\n">>,
+        <<"Warning: Temperature reached 100 degrees\n">>,
+        <<"The runner finished the race in 12 seconds\n">>,
+        <<"System update version 2.0 is now available\n">>,
+        <<"Flight number 747 is boarding now\n">>,
+        <<"Section 88 holds the key instructions\n">>,
+        <<"Level 5 requires high precision and accuracy\n">>
     ].
