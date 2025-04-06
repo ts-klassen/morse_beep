@@ -4,7 +4,7 @@
         english/0
     ]).
 
--spec english(unicode:unicode_binary()) -> [ $. | $- ].
+-spec english() -> maps:map(unicode:unicode_binary(), [ $. | $- ]).
 english() ->
     #{
         <<"a">> => ".-",
