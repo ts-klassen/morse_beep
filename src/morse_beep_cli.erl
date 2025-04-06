@@ -5,15 +5,20 @@
     ]).
 
 
-main(["await" | Args]) ->
-    application:ensure_all_started(morse_beep),
-    await(Args);
 main(Args) ->
-    help(Args).
-
-
-await(Args) ->
+    application:ensure_all_started(morse_beep),
     Param = parse_args(Args, #{}),
+    case Param of
+        #{<<"help">> := _} ->
+            help(Param);
+        #{<<"practice">> := _} ->
+            practice(Param);
+        _ ->
+            await(Param)
+    end.
+
+
+await(Param) ->
     Opts = opts_from_param(Param),
     await_(Opts).
 
@@ -22,24 +27,44 @@ await_(Opts) ->
     await_(Opts).
 
 
+practice(Param) ->
+    Opts = opts_from_param(Param),
+    Mode = case Param of
+        #{<<"practice">> := <<"char">>} ->
+            char;
+        #{<<"practice">> := <<"word">>} ->
+            word;
+        #{<<"practice">> := <<"sentence">>} ->
+            sentence;
+        _ ->
+            code
+    end,
+    morse_beep_practice:listen(Mode, Opts).
+
+
 help(_) ->
-    klsn_io:format("morse beep:
-    await:
-        --short-frequency: (integer)
-        --short-length: (integer)
-        --long-frequency: (integer)
-        --long-length: (integer)
-        --beep-delay: (integer)
-        --char-delay: (integer)
-        --word-delay: (integer)
-        --sentence-delay: (integer)
-        --time-scale: (float)
+    klsn_io:format("morse beep options:
+    --help: (void)
+    --practice: (enum: char | word | sentence | code)
+    --short-frequency: (integer)
+    --short-length: (integer)
+    --long-frequency: (integer)
+    --long-length: (integer)
+    --beep-delay: (integer)
+    --char-delay: (integer)
+    --word-delay: (integer)
+    --sentence-delay: (integer)
+    --time-scale: (float)
     ").
 
 parse_args([], Ack) ->
     Ack;
+parse_args([[$-, $- | Key], [$-, $- | _] | Tail], Ack) ->
+    parse_args(Tail, klsn_map:upsert([iolist_to_binary(Key)], void, Ack));
 parse_args([[$-, $- | Key], Value | Tail], Ack) ->
-    parse_args(Tail, klsn_map:upsert([iolist_to_binary(Key)], iolist_to_binary(Value), Ack)).
+    parse_args(Tail, klsn_map:upsert([iolist_to_binary(Key)], iolist_to_binary(Value), Ack));
+parse_args([[$-, $- | Key] | Tail], Ack) ->
+    parse_args(Tail, klsn_map:upsert([iolist_to_binary(Key)], void, Ack)).
 
 opts_from_param(Param) ->
     klsn_map:filter(#{
