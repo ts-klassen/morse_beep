@@ -1,7 +1,8 @@
 -module(morse_beep).
 
 -export([
-        await/2
+        await/2,
+        main/1
     ]).
 
 -export_type([
@@ -22,6 +23,9 @@
         sentence_delay => pos_integer(),
         atempo => float()
     }.
+
+main(Args) ->
+    morse_beep_cli:main(Args).
 
 -spec await(unicode:unicode_binary(), options()) -> ok.
 await(Str, Opts) ->
