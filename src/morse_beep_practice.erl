@@ -36,12 +36,12 @@ question(char) ->
     ];
 question(word) ->
     [
-        <<"a\n">>,
-        <<"b\n">>
+        <<"hello\n">>,
+        <<"world\n">>
     ];
 question(sentence) ->
     [
-        <<"a\n">>,
-        <<"b\n">>
+        <<"hello world\n">>,
+        <<"morse code\n">>
     ];
 
