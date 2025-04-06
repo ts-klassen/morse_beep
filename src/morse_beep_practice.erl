@@ -169,7 +169,8 @@ question(word) ->
         <<"amplitude\n">>,
         <<"continuity\n">>,
         <<"variation\n">>,
-        <<"stability\n">>
+        <<"stability\n">>,
+        <<"123\n">> % please add more questions with numbers.
     ];
 question(sentence) ->
     [
@@ -272,5 +273,6 @@ question(sentence) ->
         <<"innovative thinking enhances overall system performance\n">>,
         <<"every challenge is an opportunity to learn and grow\n">>,
         <<"mastery of coding leads to seamless and efficient communication\n">>,
-        <<"the future belongs to those who dare to innovate boldly\n">>
+        <<"the future belongs to those who dare to innovate boldly\n">>,
+        <<"There are 3 words\n">> % please add more questions with numbers.
     ].
