@@ -1,13 +1,12 @@
 -module(morse_beep_practice).
 
 -export([
-    listen/2,
-    question/1
-]).
+        listen/2
+    ]).
 
 -export_type([
-    mode/0
-]).
+        mode/0
+    ]).
 
 -type mode() :: char | word | sentence.
 
@@ -25,15 +24,24 @@ listen(Mode, Opts) ->
     klsn_io:format("~ts~n", [Question]),
     listen(Mode, Opts).
 
--spec question(mode()) -> binary().
 question(Mode) ->
     List = question_list(Mode),
     Index = rand:uniform(length(List)),
     lists:nth(Index, List).
 
-question_list(char) ->
-    [<<"a\n">>, <<"b\n">>];
-question_list(word) ->
-    [<<"a\n">>, <<"b\n">>];
-question_list(sentence) ->
-    [<<"a\n">>, <<"b\n">>].
+question(char) ->
+    [
+        <<"a\n">>,
+        <<"b\n">>
+    ];
+question(word) ->
+    [
+        <<"a\n">>,
+        <<"b\n">>
+    ];
+question(sentence) ->
+    [
+        <<"a\n">>,
+        <<"b\n">>
+    ];
+
