@@ -37,11 +37,14 @@ question(char) ->
 question(word) ->
     [
         <<"hello\n">>,
-        <<"world\n">>
+        <<"world\n">>,
+        <<"programming\n">>,
+        <<"Erlang\n">>
     ];
 question(sentence) ->
     [
         <<"hello world\n">>,
-        <<"morse code\n">>
-    ];
-
+        <<"morse code\n">>,
+        <<"I love Erlang\n">>,
+        <<"This is a test\n">>
+    ].
