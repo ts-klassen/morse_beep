@@ -11,13 +11,14 @@
 
 -type options() :: #{
         short => #{
-                frequency => pos_integer()
-              , length => pos_integer()
+                frequency => pos_integer(),
+                length => pos_integer()
             },
         long => #{
-                frequency => pos_integer()
-              , length => pos_integer()
+                frequency => pos_integer(),
+                length => pos_integer()
             },
+        beep_delay => pos_integer(),
         char_delay => pos_integer(),
         word_delay => pos_integer(),
         sentence_delay => pos_integer(),
@@ -46,10 +47,14 @@ build_beep_args([short, sentence_separator | Tail], Opts, Ack) ->
     build_beep_args(Tail, Opts, [beep_args_iolist(short, sentence, Opts)|Ack]);
 build_beep_args([long, sentence_separator | Tail], Opts, Ack) ->
     build_beep_args(Tail, Opts, [beep_args_iolist(long, sentence, Opts)|Ack]);
-build_beep_args([short | Tail], Opts, Ack) ->
+build_beep_args([short, char_separator | Tail], Opts, Ack) ->
     build_beep_args(Tail, Opts, [beep_args_iolist(short, char, Opts)|Ack]);
+build_beep_args([long, char_separator | Tail], Opts, Ack) ->
+    build_beep_args(Tail, Opts, [beep_args_iolist(long, char, Opts)|Ack]);
+build_beep_args([short | Tail], Opts, Ack) ->
+    build_beep_args(Tail, Opts, [beep_args_iolist(short, beep, Opts)|Ack]);
 build_beep_args([long | Tail], Opts, Ack) ->
-    build_beep_args(Tail, Opts, [beep_args_iolist(long, char, Opts)|Ack]).
+    build_beep_args(Tail, Opts, [beep_args_iolist(long, beep, Opts)|Ack]).
 
 beep_args_iolist(ShortLong, Delay, Opts) ->
     [
@@ -72,12 +77,14 @@ beep_args_(l, short, Opts) ->
     klsn_map:get([short, length], Opts, 50);
 beep_args_(l, long, Opts) ->
     klsn_map:get([long, length], Opts, 100);
+beep_args_('D', beep, Opts) ->
+    maps:get(beep_delay, Opts, 50);
 beep_args_('D', char, Opts) ->
-    maps:get(char_delay, Opts, 50);
+    maps:get(char_delay, Opts, 100);
 beep_args_('D', word, Opts) ->
-    maps:get(word_delay, Opts, 100);
+    maps:get(word_delay, Opts, 200);
 beep_args_('D', sentence, Opts) ->
-    maps:get(sentence_delay, Opts, 200).
+    maps:get(sentence_delay, Opts, 400).
     
 
 
@@ -96,15 +103,17 @@ parse_string(<<Char/integer, Tail/binary>>, English, Ack) ->
                 ($.)-> short;
                 ($-)-> long
             end, Code),
-            parse_string(Tail, English, [Args|Ack]);
+            parse_string(Tail, English, [char_separator, Args|Ack]);
         {_, $\s, [word_separator|_]} ->
             parse_string(Tail, English, Ack);
         {_, $\s, [sentence_separator|_]} ->
             parse_string(Tail, English, Ack);
-        {_, $\s, _} ->
-            parse_string(Tail, English, [word_separator|Ack]);
+        {_, $\s, [char_separator|T]} ->
+            parse_string(Tail, English, [word_separator|T]);
         {_, _, [sentence_separator|_]} ->
             parse_string(Tail, English, Ack);
+        {_, _, [char_separator|T]} ->
+            parse_string(Tail, English, [sentence_separator|T]);
         {_, _, [word_separator|T]} ->
             parse_string(Tail, English, [sentence_separator|T]);
         {_, _, _} ->
