@@ -1,14 +1,14 @@
 -module(morse_beep_practice).
 
 -export([
-    listen/2
-]).
+        listen/2
+    ]).
 
 -export_type([
-    mode/0
-]).
+        mode/0
+    ]).
 
--type mode() :: char | word | sentence.
+-type mode() :: char | word | sentence | code.
 
 -spec listen(mode(), morse_beep:options()) -> no_return().
 listen(Mode, Opts) ->
@@ -29,7 +29,7 @@ question(Mode) ->
     Index = rand:uniform(length(List)),
     lists:nth(Index, List).
 
-question(char) ->
+question_list(char) ->
     [
         <<"a\n">>,
         <<"b\n">>,
@@ -68,7 +68,7 @@ question(char) ->
         <<"8\n">>,
         <<"9\n">>
     ];
-question(word) ->
+question_list(word) ->
     [
         <<"sos\n">>,
         <<"hello\n">>,
@@ -169,13 +169,14 @@ question(word) ->
         <<"amplitude\n">>,
         <<"continuity\n">>,
         <<"variation\n">>,
-        <<"stability\n">>,
-        <<"123\n">>,
-        <<"456\n">>,
-        <<"789\n">>,
-        <<"101112\n">>
-    ];
-question(sentence) ->
+        <<"stability\n">>
+    ] ++ lists:map(fun(_)->
+        <<
+            (integer_to_binary(round(10000 * rand:uniform())))/binary,
+            "\n"
+        >>
+    end, lists:seq(1,10));
+question_list(sentence) ->
     [
         <<"the quick brown fox jumps over the lazy dog\n">>,
         <<"morse code is a beautiful method of communication\n">>,
@@ -277,15 +278,27 @@ question(sentence) ->
         <<"every challenge is an opportunity to learn and grow\n">>,
         <<"mastery of coding leads to seamless and efficient communication\n">>,
         <<"the future belongs to those who dare to innovate boldly\n">>,
-        % additional sentence questions with numbers:
         <<"there are 10 digits in a phone number\n">>,
         <<"the error code 404 indicates a missing resource\n">>,
         <<"operation 7 was successfully executed\n">>,
         <<"this session contains 5 tasks\n">>,
-        <<"warning: temperature reached 100 degrees\n">>,
+        <<"warning temperature reached 100 degrees\n">>,
         <<"the runner finished the race in 12 seconds\n">>,
         <<"system update version 2 is now available\n">>,
         <<"flight number 747 is boarding now\n">>,
         <<"section 88 holds the key instructions\n">>,
         <<"level 5 requires high precision and accuracy\n">>
+    ];
+question_list(code) ->
+    [
+        iolist_to_binary(lists:map(fun(_)->
+            case round(($z-$a+10) * rand:uniform()) of
+                C when C < 10 ->
+                    integer_to_binary(C);
+                C ->
+                    I = C - 10 + $a,
+                    <<I/integer>>
+            end
+        end, lists:seq(1, 1+round(10 * rand:uniform()))) ++ <<"\n">>)
     ].
+
